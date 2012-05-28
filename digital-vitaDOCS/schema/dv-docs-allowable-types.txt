@@ -1,0 +1,81 @@
+AcademicActivities.type
+	EditorialBoard
+	GrantProposalReview
+	OtherReviewActivity
+	ConferenceMaterialsReview
+	ProfSocietyMembership
+	GroupInstruction
+	OtherTeaching
+	CommitteeMembership
+	OtherScholarlyactivity
+	CommunityActivity
+	MentoringAdvising
+	PostdocorFellow
+	UndergradStudent
+	GradStudent
+	
+Publications.type
+	Article
+	Book
+	Otherpublication
+	Chapter
+	PublishedAbstract
+	Conferencepaper
+	ReviewArticle
+	
+Presentation.type
+	Poster
+	Presentation
+
+PostalAddresses.use
+	home
+	business
+	
+EmailContacts.use
+	business
+	home
+
+TelephoneContacts.use
+	home
+	business
+	
+TelephoneContacts.device
+	phone
+	fax
+	
+Fundings.awardStatus
+	Current
+	Pending
+	Complete
+	
+TeachingAct.typeTaught
+	Undergraduate
+	Graduate
+	Post-Graduate
+	Postgraduate
+	Predoctoral
+	
+CommitteeMembership.committeeType
+	department
+	school
+	university
+	
+Training.trainingLevel
+	Undergraduate
+	Graduate
+	Post-Graduate	
+	
+Publication.publicationStatus
+	accepted
+	in press
+	
+Publication.relevant
+	relevant
+	not (poorly named field)
+	(group: this field is used in bioskecth. But I'm not sure if it's Boolean or String???)
+	
+GradStudent.type
+	docotoralStudent
+	mastersStudent
+	other  (this currently parses the degree at end field, we need a field to specify)
+	(do we need an element or attribute for this???)

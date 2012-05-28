@@ -1,0 +1,44 @@
+DVDocs uses an ant build scripts to build both the API and web service.  The 
+package can be built by downloading or building several jar files that are not
+available through maven, setting the CATALINA_HOME, JAVA_HOME environment 
+variables and running the ant task 'ant build-deploy-all'.
+
+1) Ant and a Java SDK are required.  Download and istall the latest version of 
+   ant from http://ant.apache.org/bindownload.cgi.  Java can be downloaded 
+   from http://www.oracle.com/technetwork/java/javase/downloads/index.html.  
+
+2) DVDocs uses maven to download most jar dependencies but there are several
+   required jar files which aren't available via mavan.
+               
+   From the XSPARQL project the following files need to be placed
+   in the digital-vitaDOCS/lib directory:
+      cli-0.3-SNAPSHOT.jar
+      evaluator-0.3-SNAPSHOT.jar
+      osgi-consumer-0.3-SNAPSHOT.jar
+      rewriter-0.3-SNAPSHOT.jar
+   These files can be obtained by downloading and building
+   XSPARQL with the directions found at: http://xsparql.deri.org/download.
+   Make sure you use version 0.3, at the time of this writing
+   0.3 is the version found in the xsparql/trunk directory of the
+   source.
+
+   The Saxon XSLT and XQUERY library needs to be downloaded from
+   http://www.saxonica.com/.  The free Saxon "Home Edition" can
+   be used.  Rename the Saxon jar file to saxon.jar and place it
+   the digital-vitaDOCS/lib directory. 
+
+3) Set the CATALINA_HOME and JAVA_HOME environment variables to point to your 
+   Tomcat installation directory and jdk install directory respectively.
+   Examples: CATALINA_HOME=/usr/local/tomcat or JAVA_HOME=C:\java\jdk-1.6_27.
+   The CATALINA_HOME environment variable is only needed if you want to use 
+   the ant build script to deploy this application to Tomcat.
+    
+4) To build and deploy the web service run the ant target build-deploy-all. 
+   In the same directory as this file execute 'ant build-deploy-all'.
+   
+   This ant target will build both the API, resulting in dvdocs.jar, and the 
+   web service, resulting in dvdocs.war.  The web service war file will then 
+   be deployed to your tomcat/webapps directory.
+   
+   Other ant targets are available.  Execute 'ant help' to see the other 
+   targets.

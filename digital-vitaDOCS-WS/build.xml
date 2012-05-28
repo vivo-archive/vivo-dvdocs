@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="help" name="dv-docs" xmlns:artifact="urn:maven-artifact-ant">
+
+	<property environment="env"/>
+
+	<property name="build.home" value="${basedir}/build"/>
+	<property name="src.dir" value = "${basedir}/src"/>
+	<property name="java.src.dir" value="${src.dir}/main/java"/>
+	<property name="webapp.src.dir" value="${src.dir}/main/webapp"/>
+	<property name="build.classes.dir" value="${build.home}/classes"/>
+	<property name="lib.dir" value="${basedir}/lib"/>
+	<property name="docs.lib.dir" value="${basedir}/docs-lib"/>	
+	<property name="dist.dir" value="${basedir}/dist"/>
+	<property name="docs.dir" value="${basedir}/documentation/javadoc"/>
+	<property name="pom.file" value="pom.all.xml"/>
+	<property name="mvn.lib.dir" value="${basedir}/mvnlib"/>
+	<property name="tomcat.home" value="${env.CATALINA_HOME}"/>
+	<property name="tomcat.deploy.dir" value="${tomcat.home}/webapps"/>
+	<property name="tomcat.war.dir" value="${tomcat.deploy.dir}/${ant.project.name}"/>
+	<property name="tomcat.war.work.dir" value="${tomcat.home}/work/Catalina/localhost/${ant.project.name}"/>
+	<property name="war.file.name" value="${ant.project.name}.war"/>
+
+	<path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.0.9.jar" />	
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="maven-ant-tasks.classpath" />
+
+	<path id="build.classpath">
+	   <fileset dir="${mvn.lib.dir}">
+	      <include name="*.jar"/>
+	   </fileset>
+	   <fileset dir="${docs.lib.dir}">
+	      <include name="*.jar"/>
+	   </fileset>	   
+	</path>
+
+	<target name="compile-java" depends="setup">
+	   <javac
+	       fork="true"
+	       srcdir="${java.src.dir}"
+	       destdir="${build.classes.dir}"
+	       debug="true"
+	       includes="edu/**/*">
+	      
+	       <classpath>
+				 <path refid="build.classpath"/>
+	       </classpath>
+	   </javac>
+	</target>
+	<target name="clean-deploy" depends="clean-tomcat, deploy"/>
+	
+	<target name="build-war" depends="clean-class-dir, compile-java">
+	   <war destfile="${dist.dir}/${ant.project.name}.war" webxml="${webapp.src.dir}/WEB-INF/web.xml">
+			<fileset dir="${webapp.src.dir}">
+				<exclude name="WEB-INF\**\*"/>
+			</fileset>
+			<classes dir="${build.classes.dir}"/>
+			<lib dir="${mvn.lib.dir}"/>
+			<lib dir="${docs.lib.dir}"/>
+	   </war>
+	</target>
+
+	<target name="setup">
+	   <mkdir dir="${build.home}"/>
+	   <mkdir dir="${build.classes.dir}"/>
+	   <mkdir dir="${dist.dir}"/>
+	</target>
+
+	<target name="javadoc">
+	   <mkdir dir="${docs.dir}"/>
+	      <javadoc 
+		  destdir="${docs.dir}">
+		 <classpath>
+		    <path refid="build.classpath"/>
+		    <pathelement location="${java.src.dir}"/>
+		 </classpath>		   
+		 <fileset dir="${java.src.dir}" defaultexcludes="yes">
+		    <include name="edu/**/*.java" />
+		 </fileset>
+	      </javadoc>
+	</target>
+
+	<target name="build-all" depends="refresh-libraries, build-war, deploy"/>
+
+	<target name="clean">
+	   <delete dir="${build.home}" includeEmptyDirs="true"/>
+	   <delete dir="${dist.dir}" includeEmptyDirs="true"/>
+	   <delete dir="${docs.dir}" includeEmptyDirs="true"/>
+   	   <delete dir="${docs.lib.dir}" includeEmptyDirs="true"/>
+	</target>
+
+	<target name="clean-class-dir">
+	   <delete dir="${build.classes.dir}" includeEmptyDirs="true"/>
+	</target>
+   <target name="clean-tomcat" depends="check-env">
+      <delete file="${tomcat.deploy.dir}/${war.file.name}"/>
+      <delete dir="${tomcat.war.dir}" includeEmptyDirs="true"/>
+      <delete dir="${tomcat.war.work.dir}" includeEmptyDirs="true"/>
+	</target>
+   <target name="deploy" depends="check-env, build-war">
+       <copy file="${dist.dir}/${war.file.name}" todir="${tomcat.deploy.dir}" overwrite="yes"/>
+	</target>
+	<target name="help">
+	   <echo message="build-all:         Refreshes jar dependencies, builds the jar file"/>
+	   <echo message="                   and comiles the javadocs"/>
+	   <echo message="build-war:         Builds the war file"/>
+	   <echo message="javadoc:           Build the javadocs for the web service"/>
+	   <echo message="refresh-libraries: Uses maven to refresh all jar dependencies"/>
+	   <echo message="clean:             Remove all build directories"/>
+	   <echo message="clean-deploy:      Cleans build and Tomcat directories then builds and deploys the war"/>
+	   <echo message="deploy:            Cleans build directories, builds and deploys war"/>
+	</target>
+	<target name="check-env">
+		<fail unless="env.CATALINA_HOME" message="Please ensure that the environment variable CATALINA_HOME points to your Tomcat directory."/>
+	</target>
+	<target name="refresh-libraries">
+	   <delete dir="${mvn.lib.dir}" includeEmptyDirs="true"/>
+	   <mkdir dir="${mvn.lib.dir}"/>
+	   <artifact:pom id="mvn.libs.pom" file="${pom.file}" />
+	   <artifact:dependencies pomRefId="mvn.libs.pom" filesetId="mvn.libs.fileset" pathId="mvn.libs.classpath"/>
+	   <copy todir="${mvn.lib.dir}">
+	      <fileset refid="mvn.libs.fileset"/>
+	      <mapper type="flatten"/>
+	   </copy>
+	  <!-- <antcall target="refresh-eclipse-classpath"/> -->
+	</target>
+	
+</project>

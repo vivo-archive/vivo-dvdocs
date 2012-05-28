@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Poster" type="Poster"/>
+	<xs:complexType name="Poster">
+		<xs:complexContent>
+			<xs:extension base="Presentation">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Editor" type="Editor"/>
+	<xs:complexType name="Editor">
+		<xs:sequence>
+			<xs:element name="displayName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="familyName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="givenName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="positionInSequence" type="xs:int" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Person" type="Person"/>
+	<xs:complexType name="Person">
+		<xs:sequence>
+			<xs:element name="birthPlace" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="citizenship" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="eRACommonsUsername" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="familyName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="givenName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="middleNameOrInitial" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="telephoneContacts" type="TelephoneContact" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="emailContacts" type="EmailContact" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="postalAddressses" type="PostalAddress" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="professionalPositions" type="ProfessionalPosition" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="honors" type="Honor" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="trainings" type="Training" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="licenseOrCertificates" type="LicenseOrCertificate" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="publications" type="Publication" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="presentations" type="Presentation" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="patents" type="Patent" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="academicActivities" type="AcademicActivity" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="fundings" type="Funding" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="personalStatements" type="PersonalStatement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AcademicActivity" type="AcademicActivity"/>
+	<xs:complexType name="AcademicActivity">
+		<xs:sequence/>
+	</xs:complexType>
+	<xs:element name="ResearchActivity" type="ResearchActivity"/>
+	<xs:complexType name="ResearchActivity">
+		<xs:complexContent>
+			<xs:extension base="AcademicActivity">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TeachingAct" type="TeachingAct"/>
+	<xs:complexType name="TeachingAct">
+		<xs:complexContent>
+			<xs:extension base="AcademicActivity">
+				<xs:sequence>
+					<xs:element name="role" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="teachingDates" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="teachingLevel" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="typeTaught" minOccurs="1" maxOccurs="1">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Undergraduate"/>
+								<xs:enumeration value="Graduate"/>
+								<xs:enumeration value="Post-Graduate"/>
+								<xs:enumeration value="Postgraduate"/>
+								<xs:enumeration value="Predoctoral"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="PublishedAbstract" type="PublishedAbstract"/>
+	<xs:complexType name="PublishedAbstract">
+		<xs:complexContent>
+			<xs:extension base="ConferenceRelatedPubs">
+				<xs:sequence>
+					<xs:element name="abstractNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="issue" type="xs:int" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="publishedIn" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="volume" type="xs:int" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ServiceActivity" type="ServiceActivity"/>
+	<xs:complexType name="ServiceActivity">
+		<xs:complexContent>
+			<xs:extension base="AcademicActivity">
+				<xs:sequence>
+					<xs:element name="dateRange" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="role" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="CommitteeMembership" type="CommitteeMembership"/>
+	<xs:complexType name="CommitteeMembership">
+		<xs:complexContent>
+			<xs:extension base="ServiceActivity">
+				<xs:sequence>
+					<xs:element name="committeeName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="committeeType" minOccurs="1" maxOccurs="1">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="department"/>
+								<xs:enumeration value="school"/>
+								<xs:enumeration value="university"/>
+							</xs:restriction>
+						</xs:simpleType>					
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ProfSocietyMembership" type="ProfSocietyMembership"/>
+	<xs:complexType name="ProfSocietyMembership">
+		<xs:complexContent>
+			<xs:extension base="ServiceActivity">
+				<xs:sequence>
+					<xs:element name="societyName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="PeerReviewActivity" type="PeerReviewActivity"/>
+	<xs:complexType name="PeerReviewActivity">
+		<xs:complexContent>
+			<xs:extension base="ServiceActivity">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="GroupInstruction" type="GroupInstruction"/>
+	<xs:complexType name="GroupInstruction">
+		<xs:complexContent>
+			<xs:extension base="TeachingAct">
+				<xs:sequence>
+					<xs:element name="courseNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="courseTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OtherTeaching" type="OtherTeaching"/>
+	<xs:complexType name="OtherTeaching">
+		<xs:complexContent>
+			<xs:extension base="TeachingAct">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Funding" type="Funding"/>
+	<xs:complexType name="Funding">
+		<xs:sequence>
+			<xs:element name="awardStatus" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="current"/>
+						<xs:enumeration value="pending"/>
+						<xs:enumeration value="complete"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="dateRange" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="directCostsAmount" type="xs:float" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="donatedEffort" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="fundingSourceName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="fundingSourceType" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="grantOrContractNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="indirectCostsAmount" type="xs:float" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="percentSalaryCoverage" type="xs:float" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="principalInvestigator" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="projectTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="purposeOfGrant" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="role" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="totalAmount" type="xs:long" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="researchActivities" type="ResearchActivity" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="principleInvestigators" type="Contributor" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Publication" type="Publication"/>
+	<xs:complexType name="Publication">
+		<xs:sequence>
+			<xs:element name="invited" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="pages" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="peerReviewed" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="publicationDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="publicationLocation" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="publicationStatus" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="accepted"/>
+						<xs:enumeration value="in press"/>
+					</xs:restriction>
+				</xs:simpleType>	
+			</xs:element>
+			<xs:element name="publisher" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="relevantToCurrentApplication" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+			<xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="url" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="userReviewStatus" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="authors" type="Contributor" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Article" type="Article"/>
+	<xs:complexType name="Article">
+		<xs:complexContent>
+			<xs:extension base="Publication">
+				<xs:sequence>
+					<xs:element name="issue" type="xs:int" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="journalTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="month" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="pubMedCentralID" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="pubMedID" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="volume" type="xs:int" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Contributor" type="Contributor"/>
+	<xs:complexType name="Contributor">
+		<xs:sequence>
+			<xs:element name="displayName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="familyName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="givenName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="middleNameOrInitial" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Chapter" type="Chapter"/>
+	<xs:complexType name="Chapter">
+		<xs:complexContent>
+			<xs:extension base="Publication">
+				<xs:sequence>
+					<xs:element name="bookTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="editors" type="Editor" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Book" type="Book"/>
+	<xs:complexType name="Book">
+		<xs:complexContent>
+			<xs:extension base="Publication">
+				<xs:sequence>
+					<xs:element name="edition" type="xs:int" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="AdministrativeActivity" type="AdministrativeActivity"/>
+	<xs:complexType name="AdministrativeActivity">
+		<xs:complexContent>
+			<xs:extension base="AcademicActivity">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="CombClinTeachActivity" type="CombClinTeachActivity"/>
+	<xs:complexType name="CombClinTeachActivity">
+		<xs:complexContent>
+			<xs:extension base="AcademicActivity">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Presentation" type="Presentation"/>
+	<xs:complexType name="Presentation">
+		<xs:sequence>
+			<xs:element name="invited" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="meetingDates" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="meetingLocation" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="meetingName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="presentationTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="authors" type="Contributor" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Patent" type="Patent"/>
+	<xs:complexType name="Patent">
+		<xs:sequence>
+			<xs:element name="applicationDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="issueDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="patentOrApplicationNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="patentHolders" type="Contributor" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="OtherResearchActivity" type="OtherResearchActivity"/>
+	<xs:complexType name="OtherResearchActivity">
+		<xs:sequence>
+			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ConferencePaper" type="ConferencePaper"/>
+	<xs:complexType name="ConferencePaper">
+		<xs:complexContent>
+			<xs:extension base="ConferenceRelatedPubs">
+				<xs:sequence>
+					<xs:element name="editors" type="Editor" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Training" type="Training"/>
+	<xs:complexType name="Training">
+		<xs:sequence>
+			<xs:element name="dateOfDegree" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="discipline" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="honors" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="institution" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="location" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="trainingDegree" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="trainingLevel" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Undergraduate"/>
+						<xs:enumeration value="Graduate"/>
+						<xs:enumeration value="Post-Graduate"/>
+					</xs:restriction>
+				</xs:simpleType>				
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ProfessionalPosition" type="ProfessionalPosition"/>
+	<xs:complexType name="ProfessionalPosition">
+		<xs:sequence>
+			<xs:element name="academic" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="dateRange" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="department" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="institution" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="location" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="primaryPosition" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="school" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="LicenseOrCertificate" type="LicenseOrCertificate"/>
+	<xs:complexType name="LicenseOrCertificate">
+		<xs:sequence>
+			<xs:element name="expirationDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="grantingAuthority" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="issueDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="licenseNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="specialty" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="type" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Honor" type="Honor"/>
+	<xs:complexType name="Honor">
+		<xs:sequence>
+			<xs:element name="dateRange" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CommunityActivity" type="CommunityActivity"/>
+	<xs:complexType name="CommunityActivity">
+		<xs:complexContent>
+			<xs:extension base="ServiceActivity">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OtherScholarlyActivity" type="OtherScholarlyActivity"/>
+	<xs:complexType name="OtherScholarlyActivity">
+		<xs:complexContent>
+			<xs:extension base="ServiceActivity">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ConferenceRelatedPubs" type="ConferenceRelatedPubs"/>
+	<xs:complexType name="ConferenceRelatedPubs">
+		<xs:complexContent>
+			<xs:extension base="Publication">
+				<xs:sequence>
+					<xs:element name="conferenceDates" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="conferenceLocation" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="conferenceTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="proceedingsBookTitle" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MentoringAdvising" type="MentoringAdvising"/>
+	<xs:complexType name="MentoringAdvising">
+		<xs:complexContent>
+			<xs:extension base="AcademicActivity">
+				<xs:sequence>
+					<xs:element name="dateRange" type="VitaDateRange" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="studentDepartment" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="studentTraineeName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="topic" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TelephoneContact" type="TelephoneContact"/>
+	<xs:complexType name="TelephoneContact">
+		<xs:sequence>
+			<xs:element name="device" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="phone"/>
+						<xs:enumeration value="fax"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="phoneNumber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="use" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="home"/>
+						<xs:enumeration value="business"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="EmailContact" type="EmailContact"/>
+	<xs:complexType name="EmailContact">
+		<xs:sequence>
+			<xs:element name="emailAddress" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="use" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="home"/>
+						<xs:enumeration value="business"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="PostalAddress" type="PostalAddress"/>
+	<xs:complexType name="PostalAddress">
+		<xs:sequence>
+			<xs:element name="city" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="postalCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="stateOrProvince" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="street1" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="street2" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="use" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="home"/>
+						<xs:enumeration value="business"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="PostdocOrFellow" type="PostdocOrFellow"/>
+	<xs:complexType name="PostdocOrFellow">
+		<xs:complexContent>
+			<xs:extension base="MentoringAdvising">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ManuscriptReview" type="ManuscriptReview"/>
+	<xs:complexType name="ManuscriptReview">
+		<xs:complexContent>
+			<xs:extension base="JournalActivity">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="GrantProposalReview" type="GrantProposalReview"/>
+	<xs:complexType name="GrantProposalReview">
+		<xs:complexContent>
+			<xs:extension base="PeerReviewActivity">
+				<xs:sequence>
+					<xs:element name="agencyName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ConferenceMaterialsReview" type="ConferenceMaterialsReview"/>
+	<xs:complexType name="ConferenceMaterialsReview">
+		<xs:complexContent>
+			<xs:extension base="PeerReviewActivity">
+				<xs:sequence>
+					<xs:element name="meetingDescription" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OtherReviewActivity" type="OtherReviewActivity"/>
+	<xs:complexType name="OtherReviewActivity">
+		<xs:complexContent>
+			<xs:extension base="PeerReviewActivity">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="MentoredFaculty" type="MentoredFaculty"/>
+	<xs:complexType name="MentoredFaculty">
+		<xs:complexContent>
+			<xs:extension base="MentoringAdvising">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="GradStudent" type="GradStudent"/>
+	<xs:complexType name="GradStudent">
+		<xs:complexContent>
+			<xs:extension base="UndergradStudent">
+				<xs:sequence>
+					<xs:element name="completeOrExpected" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="degreeAtEnd" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="degreeDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="degreeType" minOccurs="1" maxOccurs="1">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="doctoral"/>
+								<xs:enumeration value="masters"/>
+								<xs:enumeration value="other"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="UndergradStudent" type="UndergradStudent"/>
+	<xs:complexType name="UndergradStudent">
+		<xs:complexContent>
+			<xs:extension base="MentoringAdvising">
+				<xs:sequence>
+					<xs:element name="facultyRole" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OtherPublication" type="OtherPublication"/>
+	<xs:complexType name="OtherPublication">
+		<xs:complexContent>
+			<xs:extension base="Publication">
+				<xs:sequence>
+					<xs:element name="citation" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="JournalActivity" type="JournalActivity"/>
+	<xs:complexType name="JournalActivity">
+		<xs:complexContent>
+			<xs:extension base="PeerReviewActivity">
+				<xs:sequence>
+					<xs:element name="journalName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="EditorialBoard" type="EditorialBoard"/>
+	<xs:complexType name="EditorialBoard">
+		<xs:complexContent>
+			<xs:extension base="JournalActivity">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="VitaDate" type="VitaDate"/>
+	<xs:complexType name="VitaDate">
+		<xs:sequence>
+			<xs:element name="day" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="month" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="present" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="year" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="VitaDateRange" type="VitaDateRange"/>
+	<xs:complexType name="VitaDateRange">
+		<xs:sequence>
+			<xs:element name="endDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="sortDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="startDate" type="VitaDate" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="PersonalStatement" type="PersonalStatement"/>
+	<xs:complexType name="PersonalStatement">
+		<xs:sequence>
+			<xs:element name="statement" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

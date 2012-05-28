@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="help" name="VIVODocs">
+   
+   <property environment="env"/>
+   
+   <property name="docs.dir" value="${basedir}/digital-vitaDOCS"/>
+   <property name="docs.dist.dir" value="${docs.dir}/dist"/>
+   <property name="docs.jar.path" value="${docs.dist.dir}/dvdocs.jar"/>
+   <property name="docs.lib.dir" value="${docs.dir}/lib"/>
+   <property name="docs.mvn.lib.dir" value="${docs.dir}/mvnlib"/>
+   <property name="ws.dir" value="${basedir}/digital-vitaDOCS-WS"/>
+   <property name="ws.lib.dir" value="${ws.dir}/lib"/>
+   <property name="ws.docs.lib.dir" value="${ws.dir}/docs-lib"/>
+
+   <!-- The following jar file references are used to check for the existence of
+        the referenced files.  These files are not available via maven, so must be provided separately.-->
+   <property name="xsparql-cli.jar" value="${docs.dir}/lib/cli-0.3-SNAPSHOT.jar"/>
+   <property name="xsparql-evaluator.jar" value="${docs.dir}/lib/evaluator-0.3-SNAPSHOT.jar"/>
+   <property name="xsparql-osgi.jar" value="${docs.dir}/lib/osgi-consumer-0.3-SNAPSHOT.jar"/>
+   <property name="xsparql-rewriter.jar" value="${docs.dir}/lib/rewriter-0.3-SNAPSHOT.jar"/>
+   <property name="saxon.jar" value="${docs.dir}/lib/saxon-9.3.jar"/>
+
+   <!-- checks to make sure all dependencies are present before starting a build -->
+   <target name="check-files" depends="check-dirs, check-jars">
+      <fail unless="docs.dir.present" message="Unable to build VIVODocs.  The directory ${docs.dir} does not exist." />
+      <fail unless="ws.dir.present" message="Unable to build VIVODocs.  The directory ${ws.dir} does not exist." />
+      <fail unless="cli.jar.file.present" message="Unable to build VIVODocs.  The file ${xsparql-cli.jar} does not exist.  See build-instructions.txt for more information."/>
+      <fail unless="evaluator.jar.file.present" message="Unable to build VIVODocs.  The file ${xsparql-evaluator.jar} does not exist.  See build-instructions.txt for more information."/>
+      <fail unless="osgi.jar.file.present" message="Unable to build VIVODocs.  The file ${xsparql-osgi.jar} does not exist.  See build-instructions.txt for more information."/>
+      <fail unless="rewriter.jar.file.present" message="Unable to build VIVODocs.  The file ${xsparql-rewriter.jar} does not exist.  See build-instructions.txt for more information."/>
+      <fail unless="saxon.jar.file.present" message="Unable to build VIVODocs.  The file ${saxon.jar} does not exist.  See build-instructions.txt for more information."/>
+   </target>
+   <target name="check-env">
+      <fail unless="env.CATALINA_HOME" message="Unable to build and deplay VIVODocs.  Please ensure that the environment variable CATALINA_HOME points to your Tomcat directory."/>
+   	  <fail unless="env.JAVA_HOME" message="Unable to build VIVODocs.  Please ensure that the environment variable JAVA_HOME points to you Java JDK (not SDK) directory."/>
+   </target>
+   <target name="check-dirs">
+      <available file="${docs.dir}" type="dir" property="docs.dir.present"/>
+      <available file="${ws.dir}" type="dir" property="ws.dir.present"/>
+   </target>
+   <target name="check-jars">
+      <available file="${xsparql-cli.jar}" property="cli.jar.file.present"/>
+      <available file="${xsparql-evaluator.jar}" property="evaluator.jar.file.present"/>
+      <available file="${xsparql-osgi.jar}" property="osgi.jar.file.present"/>
+      <available file="${xsparql-rewriter.jar}" property="rewriter.jar.file.present"/>
+      <available file="${saxon.jar}" property="saxon.jar.file.present"/>
+   </target>
+
+   <!-- build the jar file containing the document generator -->
+   <target name="build-doc-generator" depends="check-files">
+      <delete dir="${docs.dist.dir}" includeEmptyDirs="true"/>
+      <ant antfile="${docs.dir}/build.xml" target="build-all" inheritAll="false"/>
+      <antcall target="check-docs-jar"/>
+   </target>
+
+   <!-- check to make sure the document generation jar file is in place -->
+   <target name="check-docs-jar">
+      <available file="${docs.jar.path}" property="docs.jar.present"/>
+      <fail unless="docs.jar.present" message="Build failed.  The document generation jar file was not build."/>      
+   </target>
+
+   <!-- build the web service war file -->
+   <target name="build-ws" depends="build-doc-generator">
+      <!-- jar files that the document generator depends on are
+      copied so they can be included in the war-->
+      <delete dir="${ws.docs.lib.dir}" includeEmptyDirs="true"/>
+      <copy todir="${ws.docs.lib.dir}" file="${docs.jar.path}" overwrite="true"/>
+      <copy todir="${ws.docs.lib.dir}" overwrite="true">
+	 <fileset dir="${docs.lib.dir}">
+	    <include name="*.jar"/>
+	    <exclude name="lang*.jar, maven*.jar"/>
+	 </fileset>
+	 <fileset dir="${docs.mvn.lib.dir}">
+	    <include name="*.jar"/>
+	 </fileset>
+      </copy>
+      
+      <!-- call ws build task which uses maven to get libraries needed by ws -->
+      <ant antfile="${ws.dir}/build.xml" target="refresh-libraries" inheritAll="false"/>
+      
+      <!-- call ws build task which builds the war file -->
+      <ant antfile="${ws.dir}/build.xml" target="build-war" inheritAll="false"/>
+   </target>
+
+   <!-- main target.  Builds the document generation jar file and the ws war, then deploys the
+        war file to Tomcat. -->
+   <target name="build-deploy-all" depends="check-env, build-ws">
+      <ant antfile="${ws.dir}/build.xml" target="deploy" inheritAll="false"/>
+      <ant antfile="${ws.dir}/build.xml" target="javadoc" inheritAll="false"/>
+   </target>
+
+   <target name="help">
+      <echo message="This build is dependant on several libraries which are not"/>
+      <echo message="included in this package.  Please see the file"/> 
+      <echo message="build-instructions.txt before building."/>
+      <echo message=""/>
+      <echo message=" "/>
+      <echo message="Available Targets"/>
+      <echo message="================================================================"/>
+      <echo message="   build-deploy-all: Builds the document generator and the web"/>
+      <echo message="                     service wrapperthen deploys the web service"/>
+      <echo message="                     to Tomcat."/>
+      <echo message="build-doc-generator: Builds the document generator jar file."/>
+      <echo message="           build-ws: Builds the document generator and the web"/>
+      <echo message="                     service wrapper."/>      
+   </target>
+   
+</project>
