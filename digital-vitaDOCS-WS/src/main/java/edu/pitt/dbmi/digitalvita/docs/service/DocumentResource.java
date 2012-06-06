@@ -56,19 +56,34 @@ public class DocumentResource
 	@Produces("text/plain")
 	@GET
 	@Path("{vivoServer}/{vivoPersonId}")
-	public Response getDocument(@PathParam("vivoServer") String vivoServer, @PathParam("vivoPersonId") String vivoPersonId, @DefaultValue("pdf") @QueryParam("filetype") String filetype /*, @DefaultValue("") @QueryParam("servername") String serverName */)
+	public Response getDocument(@PathParam("vivoServer") String vivoServer, @PathParam("vivoPersonId") String vivoPersonId, @DefaultValue("pdf") @QueryParam("fileformat") String fileformat, @DefaultValue("cv") @QueryParam("filetype") String filetype, @DefaultValue("apa") @QueryParam("citations") String citations /*, @DefaultValue("") @QueryParam("servername") String serverName */)
 	{	
 		File tempRDFFile = null;
 		File tempXMLFile = null;
 		String filePrefix = Long.toString(System.nanoTime());
-		String type=null;
-		OutputFileType ftype=null;
-		type = "application/pdf";
-		ftype = OutputFileType.PDF;
-		if(filetype.trim().equals("rtf"))
+		String format=null;
+		OutputFileType fformat=null;
+		DocumentTemplateType ftype=null;
+		CitationFormat citation=null;
+		
+		// Default Values.
+		format = "application/pdf";
+		fformat = OutputFileType.PDF;
+		ftype = DocumentTemplateType.CURRICULUM_VITAE;
+		citation = CitationFormat.APA;
+		
+		if(fileformat.trim().equals("rtf"))
 		{
-			type = "application/rtf";
-			ftype = OutputFileType.RTF;
+			format = "application/rtf";
+			fformat = OutputFileType.RTF;
+		}
+		if(filetype.trim().equals("nih"))
+		{
+			ftype = DocumentTemplateType.NIH_BIOSKETCH;
+		}
+		if(citations.trim().equals("vancouver"))
+		{
+			citation = CitationFormat.VANCOUVER;
 		}
 		
 		//http://vivo-dev.dlib.indiana.edu/individual/person25557/person25557.rdf?include=all/
@@ -101,7 +116,7 @@ public class DocumentResource
 			xmlOutStream.close();
 
 			//generate a CV from the resulting xml
-			doc = generateDocument(tempXMLFile.getAbsolutePath(), ftype);
+			doc = generateDocument(tempXMLFile.getAbsolutePath(), fformat, ftype, citation);
 		}
 		catch(Exception e)
 		{
@@ -120,7 +135,7 @@ public class DocumentResource
 			removeFile(tempRDFFile);
 			removeFile(tempXMLFile);			
 		}
-		return Response.status(200).type(type).entity(doc).build();
+		return Response.status(200).type(format).entity(doc).build();
 	 }
 
 	//remove a temporary file
@@ -160,14 +175,14 @@ public class DocumentResource
 	 
 	
 	//generate a document
-	private static byte [] generateDocument(String inputFileName, OutputFileType filetype) throws DocGenException, IOException
+	private static byte [] generateDocument(String inputFileName, OutputFileType fileformat, DocumentTemplateType filetype, CitationFormat citations) throws DocGenException, IOException
 	{
 			DVDocs docs = new DVDocs();
 			File inFile = new File(inputFileName);
 			FileReader in = new FileReader(inFile);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			//default to generating a CV and use the Vancouver citation format
-			docs.generateDocument(in, DocumentTemplateType.CURRICULUM_VITAE, filetype, CitationFormat.VANCOUVER, out);
+			docs.generateDocument(in, filetype, fileformat, citations, out);
 			in.close();
 			return(out.toByteArray());
 	}	 
